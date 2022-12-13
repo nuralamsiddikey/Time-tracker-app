@@ -1,0 +1,74 @@
+.content {
+    width: 40%;
+    margin: auto;
+    background-color: rgb(0, 36, 81);
+    color: white;
+    min-height: 500px;
+    height: auto;
+    padding: 40px;
+    margin-top: 30px;
+    text-align: center;
+    border-radius: 10px;
+  }
+  
+  table {
+    width: 80%;
+    margin: auto;
+    margin-top: 20px;
+  }
+  
+  td {
+    padding: 8px 0;
+  }
+  
+  button {
+    height: 40px;
+    width: 100px;
+    font-size: 16px;
+    border: none;
+    padding: 6px 0;
+    border-radius: 10px;
+    margin: 0 5px;
+    color: white;
+  }
+  
+  .btn-start {
+    background-color: orange;
+  }
+  
+  .btn-stop {
+     background-color: #e74c3c;
+  }
+  
+  .btn-pause {
+    background-color: #3498db;
+  }
+  
+  .btn-reset {
+    background-color: #9b59b6;
+  }
+  
+  .btn-resume {
+    background-color: #ffb8b8;
+  }
+  
+  .filter {
+    margin-top: 40px;
+    background-color: white;
+    padding: 6px 0;
+    border-radius: 8px;
+  }
+  label{
+    margin-right: 5px;
+    color: black;
+  }
+  input{
+    margin-right: 20px;
+    padding: 5px;
+    border: none;
+    background-color: rgb(224, 223, 223);
+  }
+
+  a{
+    color: white;
+  }
