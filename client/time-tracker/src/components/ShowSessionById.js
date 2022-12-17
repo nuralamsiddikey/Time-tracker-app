@@ -23,6 +23,7 @@ const ShowSessionById = () => {
             <Link to="/">  <KeyboardBackspaceIcon /></Link>
             <p>Date  <span className={styles.a}>{session.sessionDate}</span></p>
             <p>Session time <span className={styles.b}> {session.hour}hr {session.minute}min</span></p>
+            <p>Pause time {session.totalPause}</p>
         </div>
     );
 };

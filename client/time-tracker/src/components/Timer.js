@@ -12,6 +12,7 @@ class Timer extends Component {
       second: 0,
       minute: 0,
       hour: 0,
+      totalPause: 0,
       totalTime: { second: 0, minute: 0, hour: 0 },
       start: true,
       pause: false,
@@ -22,7 +23,9 @@ class Timer extends Component {
       reportBox: false,
       sessionStore: [],
       totalHour: 0,
-      totalMinute: 0
+      totalMinute: 0,
+      fromDate:'',
+      toDate  :''
     }
   }
 
@@ -43,7 +46,6 @@ class Timer extends Component {
 
 
   startTimer = () => {
-
     this.timer = setInterval(() => {
       this.setState({
         second: this.state.second + 1
@@ -78,7 +80,8 @@ class Timer extends Component {
     clearInterval(this.timer)
     this.setState({
       resume: true,
-      pause: false
+      pause: false,
+      totalPause:this.state.totalPause+1
     })
   }
 
@@ -104,17 +107,18 @@ class Timer extends Component {
       reportBox: true,
       second: 0,
       minute: 0,
-      hour: 0
+      hour: 0,
+      totalPause:0
     })
 
-
+  
 
     const newSession = {
-      sessionDate: new Date().toLocaleDateString(),
-      hour: totalTime.hour,
-      minute: totalTime.minute
+        hour: totalTime.hour,
+        minute: totalTime.minute,
+        totalPause: this.state.totalPause
     }
-
+        
     fetch('http://localhost:5000/session/create', {
       method: "POST",
       headers: {
@@ -135,6 +139,16 @@ class Timer extends Component {
   }
 
 
+ 
+ filterSession = ()=>{
+        const from = this.state.fromDate
+        const to = this.state.toDate
+         fetch(`http://localhost:5000/getBetween/${from}/${to}`)
+         .then(res=>res.json())
+         .then(data=>{
+            this.setState({sessionStore: data})
+         })
+ } 
  
   render() {
     return (
@@ -180,9 +194,17 @@ class Timer extends Component {
 
 <div className='filter'>
     <label >From</label>
-    <input type="date" />
+    <input type="date" name='from' onChange={(e)=>{
+               
+                 this.setState({fromDate:e.target.value})
+    }}/>
     <label >To</label>
-    <input type="date" />
+    <input type="date" name='to' onChange={(e)=>{
+            
+                this.setState({toDate:e.target.value})
+      
+    }}/>
+    <button className='btn-search' onClick={this.filterSession}>Show</button>
 </div>
         <table>
           <thead>
@@ -190,7 +212,7 @@ class Timer extends Component {
               <th>SessionId</th>
               <th>SessionDate</th>
               <th>Time</th>
-
+              <th>Pause</th>
             </tr>
           </thead>
           <tbody>
@@ -200,6 +222,7 @@ class Timer extends Component {
                   <Link to={`/session/${data.id}`}>#{index+1}</Link>           
                   <td>{data.sessionDate}</td>
                   <td>{data.hour}hr {data.minute}min</td>
+                  <td>{data.totalPause} times</td>
 
                 </tr>
               ))

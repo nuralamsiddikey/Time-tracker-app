@@ -28,7 +28,7 @@ var db = mysql.createConnection({
               hour += parseInt(data.hour)
               minute += parseInt(data.minute)
         })
-      console.log(minute)
+      
            res.status(200).json({
              message:'Showing results',
              length: result.length,
@@ -42,7 +42,9 @@ var db = mysql.createConnection({
   })
   
  app.post('/session/create',(req,res)=>{
+   
     let sql = 'INSERT INTO session SET?'
+  
       db.query(sql,req.body,(err,result)=>{
          if(err) throw err
           
@@ -51,19 +53,35 @@ var db = mysql.createConnection({
              error: false
          })
          
-      })
-   
+      })    
+    
  })
- 
+  
 
  app.get('/getById/:id',(req,res)=>{
      const sql = `SELECT * FROM session WHERE id = ${req.params.id}`
      db.query(sql,(err,result)=>{
-         if(err) throw err
-         res.send(result)
+         if(err){console.log(err)}
+         else{
+            res.status(200).json(result)
+         }
      })
- })
    
+ })  
+   
+app.get('/getBetween/:from/:to',(req,res)=>{
+  
+    const sql = `SELECT * FROM session WHERE sessionDate BETWEEN '${req.params.from}' AND '${req.params.to}'`
+
+    db.query(sql,(err,result)=>{
+          if(err){res.status(500).send(err)}
+          else{
+              res.status(200).send(result)
+          }
+    }) 
+})
+
+
 
 //SERVER LISTENING
 app.listen(port,()=>{
