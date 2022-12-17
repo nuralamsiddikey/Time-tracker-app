@@ -118,6 +118,13 @@ class Timer extends Component {
         minute: totalTime.minute,
         totalPause: this.state.totalPause
     }
+
+    const a = {
+      sessionDate: new Date().toISOString(),
+      hour: totalTime.hour,
+      minute: totalTime.minute,
+      totalPause: this.state.totalPause
+  }
         
     fetch('http://localhost:5000/session/create', {
       method: "POST",
@@ -128,9 +135,9 @@ class Timer extends Component {
     })
       .then(res => res.json())
       .then(data => {
-
+        
         this.setState({ 
-          sessionStore: [...this.state.sessionStore, newSession],
+          sessionStore: [...this.state.sessionStore, a],
           totalHour: this.state.totalHour+totalTime.hour,
           totalMinute: this.state.totalMinute+ totalTime.minute
          })
