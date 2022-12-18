@@ -24,8 +24,8 @@ class Timer extends Component {
       sessionStore: [],
       totalHour: 0,
       totalMinute: 0,
-      fromDate:'',
-      toDate  :''
+      fromDate: '',
+      toDate: ''
     }
   }
 
@@ -36,10 +36,10 @@ class Timer extends Component {
       .then(res => res.json())
       .then(result => {
         this.setState({
-              sessionStore: result.data,
-              totalHour: result.hour,
-              totalMinute:result.minute
-           })
+          sessionStore: result.data,
+          totalHour: result.hour,
+          totalMinute: result.minute
+        })
 
       })
   }
@@ -81,7 +81,7 @@ class Timer extends Component {
     this.setState({
       resume: true,
       pause: false,
-      totalPause:this.state.totalPause+1
+      totalPause: this.state.totalPause + 1
     })
   }
 
@@ -108,24 +108,24 @@ class Timer extends Component {
       second: 0,
       minute: 0,
       hour: 0,
-      totalPause:0
+      totalPause: 0
     })
 
-  
+
 
     const newSession = {
-        hour: totalTime.hour,
-        minute: totalTime.minute,
-        totalPause: this.state.totalPause
-    }
-
-    const a = {
-      sessionDate: new Date().toISOString(),
       hour: totalTime.hour,
       minute: totalTime.minute,
       totalPause: this.state.totalPause
-  }
-        
+    }
+
+    const a = {
+      sessionDate: new Date().toLocaleDateString(),
+      hour: totalTime.hour,
+      minute: totalTime.minute,
+      totalPause: this.state.totalPause
+    }
+
     fetch('http://localhost:5000/session/create', {
       method: "POST",
       headers: {
@@ -135,84 +135,84 @@ class Timer extends Component {
     })
       .then(res => res.json())
       .then(data => {
-        
-        this.setState({ 
+
+        this.setState({
           sessionStore: [...this.state.sessionStore, a],
-          totalHour: this.state.totalHour+totalTime.hour,
-          totalMinute: this.state.totalMinute+ totalTime.minute
-         })
+          totalHour: this.state.totalHour + totalTime.hour,
+          totalMinute: this.state.totalMinute + totalTime.minute
+        })
       })
     clearInterval(this.timer)
   }
 
 
- 
- filterSession = ()=>{
-        const from = this.state.fromDate
-        const to = this.state.toDate
-         fetch(`http://localhost:5000/getBetween/${from}/${to}`)
-         .then(res=>res.json())
-         .then(data=>{
-            this.setState({sessionStore: data})
-         })
- } 
- 
+
+  filterSession = () => {
+    const from = this.state.fromDate
+    const to = this.state.toDate
+    fetch(`http://localhost:5000/getBetween/${from}/${to}`)
+      .then(res => res.json())
+      .then(data => {
+        this.setState({ sessionStore: data })
+      })
+  }
+
   render() {
     return (
       <div className='content'>
         <h3>Time tracker</h3>
 
-        {this.state.start && 
-        <button 
-          className='btn-start'
-          onClick={this.startTimer}>Start
-        </button>}
-        
-        {this.state.showTimer && 
-          <h1>{this.state.hour} 
-          : {this.state.minute} 
-          : {this.state.second}
-        </h1>}
+        {this.state.start &&
+          <button
+            className='btn-start'
+            onClick={this.startTimer}>Start
+          </button>}
+
+        {this.state.showTimer &&
+          <h1>{this.state.hour}
+            : {this.state.minute}
+            : {this.state.second}
+          </h1>}
 
         {this.state.pause &&
-         <button
-          className='btn-pause'
-          onClick={this.pauseTime}>Pause
-        </button>}
+          <button
+            className='btn-pause'
+            onClick={this.pauseTime}>Pause
+          </button>}
 
-         {this.state.resume && 
-         <button 
-          className='btn-resume'
-          onClick={this.startTimer}>Resume
-         </button>}
+        {this.state.resume &&
+          <button
+            className='btn-resume'
+            onClick={this.startTimer}>Resume
+          </button>}
 
-        {this.state.reset && 
-         <button 
-         className='btn-reset'
-         onClick={this.resetTime}>Reset
-        </button>}
+        {this.state.reset &&
+          <button
+            className='btn-reset'
+            onClick={this.resetTime}>Reset
+          </button>}
 
-        {this.state.stop && 
-        <button
-         className='btn-stop'
-         onClick={this.stopSession}>Stop
-        </button>}
+        {this.state.stop &&
+          <button
+            className='btn-stop'
+            onClick={this.stopSession}>Stop
+          </button>}
 
 
-<div className='filter'>
-    <label >From</label>
-    <input type="date" name='from' onChange={(e)=>{
-               
-                 this.setState({fromDate:e.target.value})
-    }}/>
-    <label >To</label>
-    <input type="date" name='to' onChange={(e)=>{
-            
-                this.setState({toDate:e.target.value})
-      
-    }}/>
-    <button className='btn-search' onClick={this.filterSession}>Show</button>
-</div>
+        <div className='filter'>
+          <label >From</label>
+          <input type="date" name='from' onChange={(e) => {
+
+            this.setState({ fromDate: e.target.value })
+          }} />
+          <label >To</label>
+          <input type="date" name='to' onChange={(e) => {
+
+            this.setState({ toDate: e.target.value })
+
+          }} />
+          <button className='btn-search' onClick={this.filterSession}>Show</button>
+        </div>
         <table>
           <thead>
             <tr>
@@ -224,22 +224,27 @@ class Timer extends Component {
           </thead>
           <tbody>
             {
-              this.state.sessionStore.map((data, index) => (
-                <tr key={index}>
-                  <Link to={`/session/${data.id}`}>#{index+1}</Link>           
-                  <td>{data.sessionDate}</td>
-                  <td>{data.hour}hr {data.minute}min</td>
-                  <td>{data.totalPause} times</td>
+              this.state.sessionStore.map((data, index) => {
+                const sessionDate = new Date(data.sessionDate).toLocaleDateString()
+                return (
+                  <tr key={index}>
+                    <Link to={`/session/${data.id}`}>#{index + 1}</Link>
+                    <td>{sessionDate}</td>
+                    <td>{data.hour}hr {data.minute}min</td>
+                    <td>{data.totalPause} times</td>
+                  </tr>
+                )
+              }
 
-                </tr>
-              ))
+
+              )
             }
             <tr>
-               <td><span style={{marginRight:'10px',fontWeight:900}}>Total time </span>{this.state.totalHour}hr {this.state.totalMinute}min</td>
+              <td><span style={{ marginRight: '10px', fontWeight: 900 }}>Total time </span>{this.state.totalHour}hr {this.state.totalMinute}min</td>
             </tr>
           </tbody>
         </table>
-        
+
       </div>
     );
   }

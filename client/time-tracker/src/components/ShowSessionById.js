@@ -20,7 +20,7 @@ const ShowSessionById = () => {
     return (
 
         <div className={styles.main}>
-            <Link to="/">  <KeyboardBackspaceIcon /></Link>
+            <Link to="/">  <KeyboardBackspaceIcon style={{marginBottom:'-8px'}}/><span >Back</span></Link>
             <p>Date  <span className={styles.a}>{session.sessionDate}</span></p>
             <p>Session time <span className={styles.b}> {session.hour}hr {session.minute}min</span></p>
             <p>Pause time {session.totalPause}</p>
